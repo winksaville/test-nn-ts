@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import * as process from 'process';
+import * as NN from './NeuralNet';
 
 import * as debugModule from "debug";
 const dbg = debugModule("test-nn");
@@ -34,6 +35,16 @@ function main(argv: string[]) {
         let out_path: string = argv[3];
 
         console.log(`epoch_count=${epoch_count} out_path=${out_path}`);
+        
+        dbg("test-nn: create nn");
+        let num_inputs = 2;
+        let num_hidden = 1;
+        let num_outputs = 1;
+        let nn = new NN.NeuralNet(num_inputs, num_hidden, num_outputs);
+        dbg("test-nn: created nn");
+
+    } catch(err) {
+        console.log(`test-nn: Error=${err}`);
     } finally {
         dbg("test-nn:-");
     }

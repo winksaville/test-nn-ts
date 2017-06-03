@@ -6,7 +6,7 @@
   "author": "Wink Saville <wink@saville.com>",
   "license": "APACHE2",
   "scripts": {
-    "test": "DEBUG=test-nn ts-node test-nn.ts"
+    "test": "DEBUG='test-nn,NeuralNet' ts-node test-nn.ts"
   },
   "dependencies": {
     "@types/node": "^7.0.27",
