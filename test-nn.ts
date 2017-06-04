@@ -20,6 +20,20 @@ import * as seedrandom from "seedrandom";
 import * as debugModule from "debug";
 const dbg = debugModule("test-nn");
 
+let xor_input_patterns: number[][] = [
+  [ 0, 0 ],
+  [ 1, 0 ],
+  [ 0, 1 ],
+  [ 1, 1 ]
+];
+
+let xor_target_patterns: number[][] = [
+  [ 0 ],
+  [ 1 ],
+  [ 1 ],
+  [ 0 ]
+];
+
 function main(argv: string[]) {
     try {
         dbg("main:+");
