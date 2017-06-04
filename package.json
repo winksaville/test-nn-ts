@@ -6,11 +6,13 @@
   "author": "Wink Saville <wink@saville.com>",
   "license": "APACHE2",
   "scripts": {
-    "test": "DEBUG='test-nn,NeuralNet' ts-node test-nn.ts"
+    "test": "DEBUG='test-nn,NeuralNet,Neuron' ts-node test-nn.ts"
   },
   "dependencies": {
     "@types/node": "^7.0.27",
+    "@types/seedrandom": "^2.4.27",
     "debug": "^2.6.8",
+    "seedrandom": "^2.4.3",
     "ts-node": "^3.0.4",
     "typescript": "^2.3.4"
   }

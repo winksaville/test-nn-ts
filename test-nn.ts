@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 import * as process from 'process';
-import * as NN from './NeuralNet';
+import NeuralNet from './NeuralNet';
+import * as seedrandom from "seedrandom";
 
 import * as debugModule from "debug";
 const dbg = debugModule("test-nn");
 
 function main(argv: string[]) {
     try {
-        dbg("test-nn:+");
+        dbg("main:+");
 
         if (argv.length < 4) {
             console.log(`Usage: yarn test <number of epochs> <output path>`);
@@ -31,22 +32,33 @@ function main(argv: string[]) {
 
             return;
         }
+        Math.random = seedrandom('1');
+        dbg(`main: random=${Math.random()}`);
+
         let epoch_count: number = parseInt(argv[2]);
         let out_path: string = argv[3];
 
-        console.log(`epoch_count=${epoch_count} out_path=${out_path}`);
+        dbg(`main: epoch_count=${epoch_count} out_path=${out_path}`);
         
-        dbg("test-nn: create nn");
+        dbg("main: create nn");
         let num_inputs = 2;
         let num_hidden = 1;
         let num_outputs = 1;
-        let nn = new NN.NeuralNet(num_inputs, num_hidden, num_outputs);
-        dbg("test-nn: created nn");
+        let nn = new NeuralNet(num_inputs, num_hidden, num_outputs);
+        dbg("main: created nn");
+
+        // Create a two neuron hidden layer
+        let hidden_neurons = 2;
+        nn.add_hidden(hidden_neurons);
+        
+        // Start the Neural net
+        nn.start();
 
     } catch(err) {
-        console.log(`test-nn: Error=${err}`);
+        console.log(`main: Error=${err}`);
+        throw err;
     } finally {
-        dbg("test-nn:-");
+        dbg("main:-");
     }
 }
 
