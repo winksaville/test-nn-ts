@@ -106,11 +106,7 @@ function main(argv: string[]) {
                 nn.set_inputs(xor_input_patterns[p]);
                 nn.process();
                 nn.get_outputs(xor_output[p]);
-                //error += nn.adjust_weights(xor_output[p], xor_target_patterns[p]);
-
-                //writer.begin_epoch(&writer, (epoch * pattern_count) + rp);
-                //writer.write_epoch(&writer);
-                //writer.end_epoch(&writer);
+                error += nn.adjust_weights(xor_output[p], xor_target_patterns[p]);
             }
 
             // Output some progress info
