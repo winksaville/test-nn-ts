@@ -68,6 +68,18 @@ function main(argv: string[]) {
         // Start the Neural net
         nn.start();
 
+        let error = 0.999;
+        let error_threshold = 0.0004;
+        let pattern_count = xor_input_patterns.length;
+        let rand_ps = Array<number>(pattern_count);
+        for (let epoch = 0; epoch < epoch_count; epoch++) {
+            if ((epoch % 100) == 0) {
+                console.log(`Epoch=${epoch}: error=${error}`);
+            }
+            if (error < error_threshold) {
+              break;
+            }
+        }
     } catch(err) {
         console.log(`main: Error=${err}`);
         throw err;
