@@ -89,6 +89,41 @@ export default class NeuralNet {
         dbg("set_inputs:-");
     }
 
+    process() {
+        dbg("process:+");
+        // Calcuate the output for the fully connected layers,
+        // which start at this.layers[1]
+        for (let l = 1; l <= this.out_layer; l++) {
+            let layer = this.layers[l];
+            for (let n = 0; n < layer.length; n++) {
+                // Get the next neuron
+                let neuron = layer[n];
+
+                // Neuron's inputs and weights arrays
+                let inputs = neuron.inputs;
+                let weights = neuron.weights;
+
+                // Initialize the weighted_sum to the first weight, this is the bias
+                let weight_index = 0;
+                let weighted_sum = weights[weight_index];
+
+                // Skip past bias
+                weight_index += 1;
+
+                // Loop though all of the neuron's inputs summing inputs scaled
+                // by the weight
+                for (let i = 0; i < neuron.inputs.length; i++) {
+                    weighted_sum += weights[i] * inputs[i].output;
+                }
+
+                // Calcuate the output using a Sigmoidal Activation function
+                neuron.output = 1.0 / (1.0 + Math.exp(-weighted_sum));
+                dbg(`process: neuron=${n} output=${neuron.output} weighted_sum=${weighted_sum}`);
+            }
+        }
+        dbg("process:-");
+    }
+
     start() {
         dbg("start:+");
 
