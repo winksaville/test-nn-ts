@@ -37,6 +37,7 @@ let xor_target_patterns: number[][] = [
 function main(argv: string[]) {
     try {
         dbg("main:+");
+        debugger;
 
         if (argv.length < 4) {
             console.log(`Usage: yarn test <number of epochs> <output path>`);
@@ -73,9 +74,45 @@ function main(argv: string[]) {
         let pattern_count = xor_input_patterns.length;
         let rand_ps = Array<number>(pattern_count);
         for (let epoch = 0; epoch < epoch_count; epoch++) {
+            // Shuffle rand_patterns by swapping the current
+            // position t with a random location after the
+            // current position.
+
+            // Start by resetting to sequential order
+            for (let p = 0; p < pattern_count; p++) {
+                rand_ps[p] = p;
+            }
+
+            // Shuffle
+            for (let p = 0; p < pattern_count; p++) {
+                let r0_1 = Math.random();
+                let rp = p + Math.floor(r0_1 * (pattern_count - p));
+                let t = rand_ps[p];
+                rand_ps[p] = rand_ps[rp];
+                rand_ps[rp] = t;
+                dbg(`r0_1=${r0_1} rp=${rp} rand_ps[${p}]=${rand_ps[p]}`);
+            }
+
+            // Process the pattern and accumulate the error
+            for (let rp = 0; rp < pattern_count; rp++) {
+                let p = rand_ps[rp];
+                nn.set_inputs(xor_input_patterns[p]);
+                nn.process();
+                //xor_output[p].count = OUTPUT_COUNT;
+                //nn.get_outputs(xor_output[p]);
+                //error += nn.adjust_weights(xor_output[p], xor_target_patterns[p]);
+
+                //writer.begin_epoch(&writer, (epoch * pattern_count) + rp);
+                //writer.write_epoch(&writer);
+                //writer.end_epoch(&writer);
+            }
+
+            // Output some progress info
             if ((epoch % 100) == 0) {
                 console.log(`Epoch=${epoch}: error=${error}`);
             }
+
+            // Stop if we've reached the error_threshold
             if (error < error_threshold) {
               break;
             }
