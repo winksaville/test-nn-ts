@@ -124,6 +124,20 @@ export default class NeuralNet {
         dbg("process:-");
     }
 
+    get_outputs(output: number[]) {
+        dbg(`get_outputs:+ output.length=${output.length}`);
+
+        if (output.length !== this.layers[this.out_layer].length) {
+            throw new Error(`get_outputs: output.length=${output.length} !== ${this.layers[this.out_layer].length}`);
+        }
+        for (let i = 0; i < output.length; i++) {
+            output[i] = this.layers[this.out_layer][i].output;
+            dbg(`get_outputs: output[${i}]=${output[i]}`);
+        }
+
+        dbg(`get_outputs:- output.length=${output.length}`);
+    }
+
     start() {
         dbg("start:+");
 
