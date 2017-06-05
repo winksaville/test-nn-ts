@@ -21,17 +21,24 @@ import * as debugModule from "debug";
 const dbg = debugModule("test-nn");
 
 let xor_input_patterns: number[][] = [
-  [ 0, 0 ],
-  [ 1, 0 ],
-  [ 0, 1 ],
-  [ 1, 1 ]
+    [ 0, 0 ],
+    [ 1, 0 ],
+    [ 0, 1 ],
+    [ 1, 1 ]
 ];
 
 let xor_target_patterns: number[][] = [
-  [ 0 ],
-  [ 1 ],
-  [ 1 ],
-  [ 0 ]
+    [ 0 ],
+    [ 1 ],
+    [ 1 ],
+    [ 0 ]
+];
+
+let xor_output: number[][] = [
+    [ 0 ],
+    [ 0 ],
+    [ 0 ],
+    [ 0 ]
 ];
 
 function main(argv: string[]) {
@@ -98,8 +105,7 @@ function main(argv: string[]) {
                 let p = rand_ps[rp];
                 nn.set_inputs(xor_input_patterns[p]);
                 nn.process();
-                //xor_output[p].count = OUTPUT_COUNT;
-                //nn.get_outputs(xor_output[p]);
+                nn.get_outputs(xor_output[p]);
                 //error += nn.adjust_weights(xor_output[p], xor_target_patterns[p]);
 
                 //writer.begin_epoch(&writer, (epoch * pattern_count) + rp);
