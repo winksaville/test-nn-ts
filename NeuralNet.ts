@@ -78,6 +78,58 @@ export default class NeuralNet {
         dbg(`add_hidden:- num_neurons=${num_neurons}`);
     }
 
+    start() {
+        dbg("start:+");
+
+        // Check if the user added all of the hidden layers they could
+        if ((this.last_hidden + 1) < (this.max_layers - 1)) {
+            // Nope, there were fewer hidden layers than there could be
+            // so move the output layer to be after the last hidden layer
+            this.out_layer = this.last_hidden + 1;
+            this.layers[this.out_layer].length = this.layers[this.max_layers - 1].length;
+            this.layers[this.out_layer] = this.layers[this.max_layers - 1];
+            this.layers[this.max_layers - 1] = null;
+        }
+
+        dbg(`start: max_layers=${this.max_layers} last_hidden=${this.last_hidden} out_layer=${this.out_layer}`);
+
+        // Initialize the neurons for all of the layers
+        this.points = 0;
+        for (let l = 0; l < this.max_layers; l++) {
+            let in_layer: Neuron[];
+            if (l == 0) {
+                // Layer 0 is the input layer so it has no inputs
+                in_layer = null;
+            } else {
+                in_layer = this.layers[l-1];
+            }
+            dbg(`start: this.layers[${l}].length=${this.layers[l].length} in_layer=${l}`);
+            for (let n = 0; n < this.layers[l].length; n++) {
+                this.layers[l][n] = new Neuron(in_layer);
+                this.points += this.layers[l][n].points;
+            }
+        }
+
+        // Add the number of outputs since we're currently
+        // not displaying outputs of hidden layers
+        this.points += this.layers[this.out_layer].length;
+
+        // Add two more for the bounding box
+        this.points += 2;
+
+        dbg("start:-");
+    }
+
+    stop() {
+        dbg("stop:+");
+        dbg("stop:-");
+    }
+
+    get_points(): number {
+        dbg(`get_points:+- points=${this.points}`);
+        return this.points;
+    }
+
     set_inputs(input: number[]) {
         dbg(`set_inputs:+ count=${input.length} input_layer count=${this.layers[0].length}`);
         for (let n = 0; n < this.layers[0].length; n++) {
@@ -91,6 +143,7 @@ export default class NeuralNet {
 
     process() {
         dbg("process:+");
+
         // Calcuate the output for the fully connected layers,
         // which start at this.layers[1]
         for (let l = 1; l <= this.out_layer; l++) {
@@ -121,6 +174,7 @@ export default class NeuralNet {
                 dbg(`process: neuron=${n} output=${neuron.output} weighted_sum=${weighted_sum}`);
             }
         }
+
         dbg("process:-");
     }
 
@@ -138,7 +192,7 @@ export default class NeuralNet {
         dbg(`get_outputs:- output.length=${output.length}`);
     }
 
-    adjust_weights(output: number[], target: number[]) {
+    adjust_weights(output: number[], target: number[]): number {
         dbg(`adjust_weights:+ output.length=${output.length} target.length=${target.length}`);
 
         // Calculate the network error and partial derivative of the error
@@ -256,47 +310,5 @@ export default class NeuralNet {
 
         dbg(`adjust_weights:+ error=${this.error}`);
         return this.error;
-    }
-
-    start() {
-        dbg("start:+");
-
-        // Check if the user added all of the hidden layers they could
-        if ((this.last_hidden + 1) < (this.max_layers - 1)) {
-            // Nope, there were fewer hidden layers than there could be
-            // so move the output layer to be after the last hidden layer
-            this.out_layer = this.last_hidden + 1;
-            this.layers[this.out_layer].length = this.layers[this.max_layers - 1].length;
-            this.layers[this.out_layer] = this.layers[this.max_layers - 1];
-            this.layers[this.max_layers - 1] = null;
-        }
-
-        dbg(`start: max_layers=${this.max_layers} last_hidden=${this.last_hidden} out_layer=${this.out_layer}`);
-
-        // Initialize the neurons for all of the layers
-        this.points = 0;
-        for (let l = 0; l < this.max_layers; l++) {
-            let in_layer: Neuron[];
-            if (l == 0) {
-                // Layer 0 is the input layer so it has no inputs
-                in_layer = null;
-            } else {
-                in_layer = this.layers[l-1];
-            }
-            dbg(`start: this.layers[${l}].length=${this.layers[l].length} in_layer=${l}`);
-            for (let n = 0; n < this.layers[l].length; n++) {
-                this.layers[l][n] = new Neuron(in_layer);
-                this.points += this.layers[l][n].points;
-            }
-        }
-
-        // Add the number of outputs since we're currently
-        // not displaying outputs of hidden layers
-        this.points += this.layers[this.out_layer].length;
-
-        // Add two more for the bounding box
-        this.points += 2;
-
-        dbg("start:-");
     }
 }
