@@ -78,6 +78,17 @@ export default class NeuralNet {
         dbg(`add_hidden:- num_neurons=${num_neurons}`);
     }
 
+    set_inputs(input: number[]) {
+        dbg(`set_inputs:+ count=${input.length} input_layer count=${this.layers[0].length}`);
+        for (let n = 0; n < this.layers[0].length; n++) {
+            // Set then input neuron output
+            let neuron = this.layers[0][n];
+            neuron.output = input[n];
+            dbg(`set_inputs: neuron=${n} output=${neuron.output}`);
+        }
+        dbg("set_inputs:-");
+    }
+
     start() {
         dbg("start:+");
 
