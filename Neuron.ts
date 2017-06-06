@@ -53,7 +53,6 @@ export default class Neuron {
             momentums = new Array<number>(count);
             for (let m = 0; m < count; m++) {
                 momentums[m] = 0.0;
-                dbg(`ctor: momentums[${m}]=${momentums[m]}`);
             }
 
             points = count; // + 1 // for output

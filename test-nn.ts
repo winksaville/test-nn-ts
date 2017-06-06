@@ -83,6 +83,11 @@ function main(argv: string[]) {
         let error_threshold = 0.0004;
         let pattern_count = xor_input_patterns.length;
         let rand_ps = Array<number>(pattern_count);
+
+        //status = NeuralNetIoWriter_init(&writer, &nn, nn.get_points(&nn), out_path);
+        let pts = nn.get_points();
+        //if (StatusErr(status)) goto done;
+
         for (epoch = 0; epoch < epoch_count; epoch++) {
             // Shuffle rand_patterns by swapping the current
             // position t with a random location after the
@@ -126,7 +131,7 @@ function main(argv: string[]) {
 
         nn.stop();
 
-        consolew("Pat");
+        consolew("\nPat");
         for (let i = 0; i < xor_input_patterns[0].length; i++) {
             consolew(`\tInput${i}`);
         }

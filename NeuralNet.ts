@@ -193,12 +193,11 @@ export default class NeuralNet {
 
         // Calculate the network error and partial derivative of the error
         // for the output layer
-        dbg("adjust_weights: calculate pd_error and total_error");
+        dbg("\nadjust_weights: calculate pd_error and total_error");
         this.error = 0.0;
         if (output.length !== target.length) {
             throw new Error(`output.length:${output.length} !== target.length:${target.length}`);
         }
-        dbg(`adjust_weights: out_layer:${this.out_layer}`);
         for (let n = 0; n < output.length; n++) {
             // Compute the error as the difference between target and output
             let err = target[n] - output[n];
@@ -218,7 +217,7 @@ export default class NeuralNet {
             let tmp = this.error;
             this.error = tmp + sse;
             dbg(`adjust_weights: ${this.out_layer}:${n} this.error:${this.error} =`
-                + ` this.error:${this.error} + sse:${sse}`);
+                + ` this.error:${tmp} + sse:${sse}`);
         }
         dbg(`adjust_weights: out_layer:${this.out_layer} this.error=${this.error}`);
 
@@ -229,7 +228,7 @@ export default class NeuralNet {
         for (let l = this.out_layer; l > first_hidden_layer; l--) {
             let cur_layer = this.layers[l];
             let prev_layer = this.layers[l-1];
-            dbg(`adjust_weights: ${l} prev_layer=${l-1}`);
+            dbg(`adjust_weights: cur_layer=${l} prev_layer=${l-1}`);
 
             // Compute the partial derivative of the error for the previous layer
             for (let npl = 0; npl < prev_layer.length; npl++) {
