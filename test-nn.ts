@@ -106,7 +106,7 @@ function main(argv: string[]) {
                 let t = rand_ps[p];
                 rand_ps[p] = rand_ps[rp];
                 rand_ps[rp] = t;
-                dbg(`r0_1=${r0_1} rp=${rp} rand_ps[${p}]=${rand_ps[p]}`);
+                //dbg(`r0_1=${r0_1} rp=${rp} rand_ps[${p}]=${rand_ps[p]}`);
             }
 
             // Process the pattern and accumulate the error
