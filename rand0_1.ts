@@ -48,8 +48,8 @@ export default function rand0_1(): number {
             dbg("rand0_1=overlowed");
             rand_idx = 0;
         }
+        dbg(`rand0_1=${v}`);
     }
-    dbg(`rand0_1=${v}`);
     return v;
 }
 
