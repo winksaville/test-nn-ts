@@ -200,23 +200,19 @@ export default class NeuralNet {
         for (let n = 0; n < output.length; n++) {
             // Compute the error as the difference between target and output
             let err = target[n] - output[n];
-            dbg(`adjust_weights: ${this.out_layer}:${n} err:${err} =`
-                + ` target:${target[n]} + output:${output[n]}`);
+            dbg(`adjust_weights: ${this.out_layer}:${n} err:${err} = target:${target[n]} + output:${output[n]}`);
 
             // Compute the partial derivative of the activation w.r.t. error
             let pd_err = err * output[n] * (1.0 - output[n]);
             this.layers[this.out_layer][n].pd_error = pd_err;
-            dbg(`adjust_weights: ${this.out_layer}:${n} pd_err:${pd_err} =`
-                + ` err:${err} * output[${n}]:${output[n]} * (1.0 - output[${n}]:${output[n]}`);
+            dbg(`adjust_weights: ${this.out_layer}:${n} pd_err:${pd_err} = err:${err} * output[${n}]:${output[n]} * (1.0 - output[${n}]:${output[n]}`);
 
             // Compute the sum of the square of the error and add to total_error
             let sse = 0.5 * err * err;
-            dbg(`adjust_weights: ${this.out_layer}:${n} sse:${sse} =`
-                + ` 0.5 * err:${err} * err:${err}`);
+            dbg(`adjust_weights: ${this.out_layer}:${n} sse:${sse} = 0.5 * err:${err} * err:${err}`);
             let tmp = this.error;
             this.error = tmp + sse;
-            dbg(`adjust_weights: ${this.out_layer}:${n} this.error:${this.error} =`
-                + ` this.error:${tmp} + sse:${sse}`);
+            dbg(`adjust_weights: ${this.out_layer}:${n} this.error:${this.error} = this.error:${tmp} + sse:${sse}`);
         }
         dbg(`adjust_weights: out_layer:${this.out_layer} this.error=${this.error}`);
 
@@ -239,23 +235,19 @@ export default class NeuralNet {
                     dbg(`adjust_weights: ${l}:${ncl} weight:${weight} = cur_layer[${ncl}].weights[${npl+1}]`);
                     let tmp = sum_weighted_pd_err;
                     sum_weighted_pd_err = tmp + (pd_err * weight);
-                    dbg(`adjust_weights: ${l}:${ncl} sum_weighted_pd_err:${sum_weighted_pd_err} =`
-                        + ` ${tmp} + (pd_err:${pd_err} * weight:${weight})`);
+                    dbg(`adjust_weights: ${l}:${ncl} sum_weighted_pd_err:${sum_weighted_pd_err} = ${tmp} + (pd_err:${pd_err} * weight:${weight})`);
                 }
 
                 let prev_out = prev_layer[npl].output;
                 let pd_prev_out = prev_out * (1.0 - prev_out);
-                dbg(`adjust_weights: prev_layer:${l-1}:${npl} pd_prev_out:${pd_prev_out} = `
-                    + `prev_out:${prev_out} * (1.0 - prev_out:${prev_out})`);
+                dbg(`adjust_weights: prev_layer:${l-1}:${npl} pd_prev_out:${pd_prev_out} = prev_out:${prev_out} * (1.0 - prev_out:${prev_out})`);
                 prev_layer[npl].pd_error = sum_weighted_pd_err * pd_prev_out;
-                dbg(`adjust_weights: prev_layer:${l-1}:${npl} pd_error:${prev_layer[npl].pd_error} =`
-                    + ` sum_weighted_pd_err:${sum_weighted_pd_err} * pd_prev_out:${pd_prev_out}`);
+                dbg(`adjust_weights: prev_layer:${l-1}:${npl} pd_error:${prev_layer[npl].pd_error} = sum_weighted_pd_err:${sum_weighted_pd_err} * pd_prev_out:${pd_prev_out}`);
             }
         }
 
         // Update the weights for hidden layers and output layer
-        dbg(`\nadjust_weights: update weights learning_rate=${this.learning_rate}`
-            + ` momemutum_factor=${this.momentum_factor}`);
+        dbg(`\nadjust_weights: update weights learning_rate=${this.learning_rate} momemutum_factor=${this.momentum_factor}`);
         for (let l = 1; l <= this.out_layer; l++) {
             let layer = this.layers[l];
             dbg(`adjust_weights: layers:${l} looping`);
@@ -273,16 +265,13 @@ export default class NeuralNet {
 
                 // Update the weights for bias
                 let momentum = this.momentum_factor * momentums[0];
-                dbg(`adjust_weights: ${l}:${n} momentum:${momentum} =`
-                    + ` this.momentum_factor:${this.momentum_factor} * momentums[0]:${momentums[0]}`);
+                dbg(`adjust_weights: ${l}:${n} momentum:${momentum} = this.momentum_factor:${this.momentum_factor} * momentums[0]:${momentums[0]}`);
                 momentums[0] = (this.learning_rate * pd_err) + momentum;
-                dbg(`adjust_weights: ${l}:${n} momentums[0]:${momentums[0]} =`
-                    + ` (eta:${this.learning_rate} * pd_err:${pd_err}) + momentum:${momentum} bias`);
+                dbg(`adjust_weights: ${l}:${n} momentums[0]:${momentums[0]} = (eta:${this.learning_rate} * pd_err:${pd_err}) + momentum:${momentum} bias`);
 
                 let w = weights[0];
                 weights[0] = weights[0] + momentums[0];
-                dbg(`adjust_weights: ${l}:${n} weights[0]=${weights[0]} = `
-                    + `weights[0]:${weights[0]} + momentums[0]:${momentums[0]} bias`);
+                dbg(`adjust_weights: ${l}:${n} weights[0]=${weights[0]} = weights[0]:${weights[0]} + momentums[0]:${momentums[0]} bias`);
 
                 // Loop through this neurons input neurons adjusting the weights and momentums
                 dbg(`adjust_weights: ${l}:${n} update weights pd_err=${pd_err}`);
@@ -291,13 +280,11 @@ export default class NeuralNet {
                     let input = inputs[i-1].output;
                     momentum = this.momentum_factor * momentums[i];
                     momentums[i]  = (this.learning_rate * input * pd_err) + momentum;
-                    dbg(`adjust_weights: ${l}:${n} momentums[${i}]:${momentums[i]} =`
-                        + ` (eta:${this.learning_rate} * input:${input} pd_err:${pd_err}) + momentum:${momentum}`);
+                    dbg(`adjust_weights: ${l}:${n} momentums[${i}]:${momentums[i]} = (eta:${this.learning_rate} * input:${input} pd_err:${pd_err}) + momentum:${momentum}`);
 
                     w = weights[i];
                     weights[i] = weights[i] + momentums[i];
-                    dbg(`adjust_weights: ${l}:${n} weights[${i}]:${weights[i]} =`
-                        + ` weights[${i}]:${weights[i]} + momentums[${i}]=${momentums[i]}`);
+                    dbg(`adjust_weights: ${l}:${n} weights[${i}]:${weights[i]} = weights[${i}]:${weights[i]} + momentums[${i}]=${momentums[i]}`);
                 }
             }
         }
