@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import rand0_1 from "./rand0_1";
+
 import * as debugModule from "debug";
 const dbg = debugModule("Neuron");
 
@@ -43,7 +45,7 @@ export default class Neuron {
             // Initialize weights >= -0.5 and < 0.5
             dbg(`ctor:  top of loop count=${count}`);
             for (let w = 0; w < count; w++) {
-                weights[w] = Math.random() - 0.5;
+                weights[w] = rand0_1() - 0.5;
                 dbg(`ctor: weights[${w}]=${weights[w]}`);
             }
 

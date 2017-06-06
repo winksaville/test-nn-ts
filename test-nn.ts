@@ -16,6 +16,7 @@
 import * as process from 'process';
 import NeuralNet from './NeuralNet';
 import * as seedrandom from "seedrandom";
+import rand0_1 from "./rand0_1";
 
 import * as debugModule from "debug";
 const dbg = debugModule("test-nn");
@@ -41,9 +42,13 @@ let xor_output: number[][] = [
     [ 0 ]
 ];
 
+function consolew(s: string) {
+    process.stdout.write(s);
+}
+
 function main(argv: string[]) {
     try {
-        dbg("main:+");
+        dbg("test-nn:+");
         debugger;
 
         if (argv.length < 4) {
@@ -55,19 +60,16 @@ function main(argv: string[]) {
             return;
         }
         Math.random = seedrandom('1');
-        dbg(`main: random=${Math.random()}`);
 
         let epoch_count: number = parseInt(argv[2]);
         let out_path: string = argv[3];
 
-        dbg(`main: epoch_count=${epoch_count} out_path=${out_path}`);
+        dbg(`test-nn: epoch_count=${epoch_count} out_path=${out_path}`);
         
-        dbg("main: create nn");
         let num_inputs = 2;
         let num_hidden = 1;
         let num_outputs = 1;
         let nn = new NeuralNet(num_inputs, num_hidden, num_outputs);
-        dbg("main: created nn");
 
         // Create a two neuron hidden layer
         let hidden_neurons = 2;
@@ -76,11 +78,12 @@ function main(argv: string[]) {
         // Start the Neural net
         nn.start();
 
+        let epoch;
         let error = 0.999;
         let error_threshold = 0.0004;
         let pattern_count = xor_input_patterns.length;
         let rand_ps = Array<number>(pattern_count);
-        for (let epoch = 0; epoch < epoch_count; epoch++) {
+        for (epoch = 0; epoch < epoch_count; epoch++) {
             // Shuffle rand_patterns by swapping the current
             // position t with a random location after the
             // current position.
@@ -92,7 +95,7 @@ function main(argv: string[]) {
 
             // Shuffle
             for (let p = 0; p < pattern_count; p++) {
-                let r0_1 = Math.random();
+                let r0_1 = rand0_1();
                 let rp = p + Math.floor(r0_1 * (pattern_count - p));
                 let t = rand_ps[p];
                 rand_ps[p] = rand_ps[rp];
@@ -119,11 +122,39 @@ function main(argv: string[]) {
               break;
             }
         }
+        console.log(`\n\nEpoch=${epoch} Error=${error}`);
+
+        nn.stop();
+
+        consolew("Pat");
+        for (let i = 0; i < xor_input_patterns[0].length; i++) {
+            consolew(`\tInput${i}`);
+        }
+        for (let t = 0; t < xor_target_patterns[0].length; t++) {
+            consolew(`\tTarget${t}`);
+        }
+        for (let o = 0; o < xor_output[0].length; o++) {
+            consolew(`\tOutput${0}`);
+        }
+        consolew("\n");
+        for (let p = 0; p < pattern_count; p++) {
+            consolew(`${p}`);
+            for (let i = 0; i < xor_input_patterns[p].length; i++) {
+                consolew(`\t${xor_input_patterns[p][i]}`);
+            }
+            for (let t = 0; t < xor_target_patterns[p].length; t++) {
+                consolew(`\t${xor_target_patterns[p][t]}`);
+            }
+            for (let o = 0; o < xor_output[p].length; o++) {
+                consolew(`\t${xor_output[p][o]}`);
+            }
+            consolew("\n");
+        }
     } catch(err) {
-        console.log(`main: Error=${err}`);
+        console.log(`test-nn: Error=${err}`);
         throw err;
     } finally {
-        dbg("main:-");
+        dbg("test-nn:-");
     }
 }
 
