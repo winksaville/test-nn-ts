@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 import dbg from './Debug';
-import { debugging } from './Debug';
+
+const debugging = false;
 
 let rand_idx = 0;
 let rand_nums: number[] = [
