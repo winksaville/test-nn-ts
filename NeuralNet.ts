@@ -157,16 +157,12 @@ export default class NeuralNet {
                 let weights = neuron.weights;
 
                 // Initialize the weighted_sum to the first weight, this is the bias
-                let weight_index = 0;
-                let weighted_sum = weights[weight_index];
-
-                // Skip past bias
-                weight_index += 1;
+                let weighted_sum = weights[0];
 
                 // Loop though all of the neuron's inputs summing inputs scaled
                 // by the weight
                 for (let i = 0; i < neuron.inputs.length; i++) {
-                    weighted_sum += weights[i] * inputs[i].output;
+                    weighted_sum += weights[i+1] * inputs[i].output;
                 }
 
                 // Calcuate the output using a Sigmoidal Activation function
