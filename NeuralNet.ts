@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as debugModule from "debug";
-const dbg = debugModule("NeuralNet");
-
 import Neuron from './Neuron';
+
+import dbg from './Debug';
 
 export default class NeuralNet {
 

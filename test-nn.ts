@@ -18,8 +18,8 @@ import NeuralNet from './NeuralNet';
 import * as seedrandom from "seedrandom";
 import rand0_1 from "./rand0_1";
 
-import * as debugModule from "debug";
-const dbg = debugModule("test-nn");
+import dbg from './Debug';
+
 
 let xor_input_patterns: number[][] = [
     [ 0, 0 ],
@@ -51,8 +51,8 @@ function main(argv: string[]) {
         dbg("test-nn:+");
         debugger;
 
-        if (argv.length < 4) {
-            console.log(`Usage: yarn test <number of epochs> <output path>`);
+        if (argv.length < 3) {
+            console.log(`Usage: yarn test <number of epochs>`);
             argv.forEach((val, index) => {
                 console.log(`${index}: ${val}`);
             });
@@ -62,9 +62,8 @@ function main(argv: string[]) {
         Math.random = seedrandom('1');
 
         let epoch_count: number = parseInt(argv[2]);
-        let out_path: string = argv[3];
 
-        dbg(`test-nn: epoch_count=${epoch_count} out_path=${out_path}`);
+        dbg(`test-nn: epoch_count=${epoch_count}`);
         
         let num_inputs = 2;
         let num_hidden = 1;
@@ -84,9 +83,9 @@ function main(argv: string[]) {
         let pattern_count = xor_input_patterns.length;
         let rand_ps = Array<number>(pattern_count);
 
-        //status = NeuralNetIoWriter_init(&writer, &nn, nn.get_points(&nn), out_path);
+        // Added so output is the same as test-nn.c where
+        // nn.get_points is called with the writer is initialized.
         let pts = nn.get_points();
-        //if (StatusErr(status)) goto done;
 
         for (epoch = 0; epoch < epoch_count; epoch++) {
             // Shuffle rand_patterns by swapping the current
@@ -118,13 +117,13 @@ function main(argv: string[]) {
             }
 
             // Output some progress info
-            if ((epoch % 100) == 0) {
+            if ((epoch % 100000) == 0) {
                 console.log(`Epoch=${epoch}: error=${error}`);
             }
 
             // Stop if we've reached the error_threshold
             if (error < error_threshold) {
-              break;
+                //break;
             }
         }
         console.log(`\n\nEpoch=${epoch} Error=${error}`);

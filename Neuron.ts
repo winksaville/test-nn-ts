@@ -15,8 +15,7 @@
  */
 import rand0_1 from "./rand0_1";
 
-import * as debugModule from "debug";
-const dbg = debugModule("Neuron");
+import dbg from "./Debug";
 
 export default class Neuron {
     inputs: Neuron[];     // Neuron layer of inputs

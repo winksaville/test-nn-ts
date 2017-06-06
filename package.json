@@ -7,8 +7,8 @@
   "license": "APACHE2",
   "scripts": {
     "runit": "ts-node test-nn.ts",
-    "test": "DEBUG='test-nn,NeuralNet,Neuron,rand0_1' ts-node test-nn.ts",
-    "dbg": "DEBUG='test-nn,NeuralNet,Neuron,rand0_1' ts-node --inspect --debug-brk test-nn.ts"
+    "test": "DEBUG=DBG ts-node test-nn.ts",
+    "dbg": "DEBUG=DBG ts-node --inspect --debug-brk test-nn.ts"
   },
   "dependencies": {
     "@types/node": "^7.0.27",

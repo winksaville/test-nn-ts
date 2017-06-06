@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as debugModule from "debug";
-const dbg = debugModule("rand0_1");
-
+import dbg from './Debug';
+import { debugging } from './Debug';
 
 let rand_idx = 0;
 let rand_nums: number[] = [
@@ -38,7 +37,6 @@ let rand_nums: number[] = [
     0.635712
 ];
 
-let debugging = true;
 export default function rand0_1(): number {
     let v: number;
     if (!debugging) {
