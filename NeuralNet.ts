@@ -302,7 +302,7 @@ export default class NeuralNet {
             }
         }
 
-        dbg(`adjust_weights:+ error=${this.error}`);
+        dbg(`adjust_weights:- error=${this.error}`);
         return this.error;
     }
 }
