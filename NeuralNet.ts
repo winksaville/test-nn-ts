@@ -37,7 +37,7 @@ export default class NeuralNet {
     layers: Neuron[][];
 
     constructor(num_in_neurons: number, num_hidden_layers: number, num_out_neurons: number) {
-        dbg(`ctor:+ in_neurons=${num_in_neurons} hidden_layers=${num_hidden_layers} out_neurons=${num_out_neurons}`);
+        //dbg(`ctor:+ in_neurons=${num_in_neurons} hidden_layers=${num_hidden_layers} out_neurons=${num_out_neurons}`);
 
         this.max_layers = 2; // We always have an input and output layer
         this.max_layers += num_hidden_layers; // Add num_hidden layers
@@ -54,19 +54,19 @@ export default class NeuralNet {
         this.create_layer(0, num_in_neurons);
         this.create_layer(this.out_layer, num_out_neurons);
 
-        dbg("ctor:-");
+        //dbg("ctor:-");
     }
 
     create_layer(layer_index: number, num_neurons: number) {
-        dbg(`create_layer:+ layer_index=${layer_index} num_neurons=${num_neurons}`);
+        //dbg(`create_layer:+ layer_index=${layer_index} num_neurons=${num_neurons}`);
 
         this.layers[layer_index] = new Array(num_neurons);
 
-        dbg(`create_layer:- layer_index=${layer_index} num_neurons=${num_neurons}`);
+        //dbg(`create_layer:- layer_index=${layer_index} num_neurons=${num_neurons}`);
     }
 
     add_hidden(num_neurons: number) {
-        dbg(`add_hidden:+ num_neurons=${num_neurons}`);
+        //dbg(`add_hidden:+ num_neurons=${num_neurons}`);
 
         this.last_hidden += 1;
         if (this.last_hidden >= (this.max_layers - 1)) {
@@ -74,11 +74,11 @@ export default class NeuralNet {
         }
         this.create_layer(this.last_hidden, num_neurons);
 
-        dbg(`add_hidden:- num_neurons=${num_neurons}`);
+        //dbg(`add_hidden:- num_neurons=${num_neurons}`);
     }
 
     start() {
-        dbg("start:+");
+        //dbg("start:+");
 
         // Check if the user added all of the hidden layers they could
         if ((this.last_hidden + 1) < (this.max_layers - 1)) {
@@ -90,7 +90,7 @@ export default class NeuralNet {
             this.layers[this.max_layers - 1] = null;
         }
 
-        dbg(`start: max_layers=${this.max_layers} last_hidden=${this.last_hidden} out_layer=${this.out_layer}`);
+        //dbg(`start: max_layers=${this.max_layers} last_hidden=${this.last_hidden} out_layer=${this.out_layer}`);
 
         // Initialize the neurons for all of the layers
         this.points = 0;
@@ -102,7 +102,7 @@ export default class NeuralNet {
             } else {
                 in_layer = this.layers[l-1];
             }
-            dbg(`start: this.layers[${l}].length=${this.layers[l].length} in_layer=${l}`);
+            //dbg(`start: this.layers[${l}].length=${this.layers[l].length} in_layer=${l}`);
             for (let n = 0; n < this.layers[l].length; n++) {
                 this.layers[l][n] = new Neuron(in_layer);
                 this.points += this.layers[l][n].points;
@@ -116,32 +116,32 @@ export default class NeuralNet {
         // Add two more for the bounding box
         this.points += 2;
 
-        dbg("start:-");
+        //dbg("start:-");
     }
 
     stop() {
-        dbg("stop:+");
-        dbg("stop:-");
+        //dbg("stop:+");
+        //dbg("stop:-");
     }
 
     get_points(): number {
-        dbg(`get_points:+- points=${this.points}`);
+        //dbg(`get_points:+- points=${this.points}`);
         return this.points;
     }
 
     set_inputs(input: number[]) {
-        dbg(`set_inputs:+ count=${input.length} input_layer count=${this.layers[0].length}`);
+        //dbg(`set_inputs:+ count=${input.length} input_layer count=${this.layers[0].length}`);
         for (let n = 0; n < this.layers[0].length; n++) {
             // Set then input neuron output
             let neuron = this.layers[0][n];
             neuron.output = input[n];
-            dbg(`set_inputs: neuron=${n} output=${neuron.output}`);
+            //dbg(`set_inputs: neuron=${n} output=${neuron.output}`);
         }
-        dbg("set_inputs:-");
+        //dbg("set_inputs:-");
     }
 
     process() {
-        dbg("process:+");
+        //dbg("process:+");
 
         // Calcuate the output for the fully connected layers,
         // which start at this.layers[1]
@@ -166,33 +166,33 @@ export default class NeuralNet {
 
                 // Calcuate the output using a Sigmoidal Activation function
                 neuron.output = 1.0 / (1.0 + Math.exp(-weighted_sum));
-                dbg(`process: neuron=${n} output=${neuron.output} weighted_sum=${weighted_sum}`);
+                //dbg(`process: neuron=${n} output=${neuron.output} weighted_sum=${weighted_sum}`);
             }
         }
 
-        dbg("process:-");
+        //dbg("process:-");
     }
 
     get_outputs(output: number[]) {
-        dbg(`get_outputs:+ output.length=${output.length}`);
+        //dbg(`get_outputs:+ output.length=${output.length}`);
 
         if (output.length !== this.layers[this.out_layer].length) {
             throw new Error(`get_outputs: output.length=${output.length} !== ${this.layers[this.out_layer].length}`);
         }
         for (let i = 0; i < output.length; i++) {
             output[i] = this.layers[this.out_layer][i].output;
-            dbg(`get_outputs: output[${i}]=${output[i]}`);
+            //dbg(`get_outputs: output[${i}]=${output[i]}`);
         }
 
-        dbg(`get_outputs:- output.length=${output.length}`);
+        //dbg(`get_outputs:- output.length=${output.length}`);
     }
 
     adjust_weights(output: number[], target: number[]): number {
-        dbg(`adjust_weights:+ output.length=${output.length} target.length=${target.length}`);
+        //dbg(`adjust_weights:+ output.length=${output.length} target.length=${target.length}`);
 
         // Calculate the network error and partial derivative of the error
         // for the output layer
-        dbg("\nadjust_weights: calculate pd_error and total_error");
+        //dbg("\nadjust_weights: calculate pd_error and total_error");
         this.error = 0.0;
         if (output.length !== target.length) {
             throw new Error(`output.length:${output.length} !== target.length:${target.length}`);
@@ -200,57 +200,57 @@ export default class NeuralNet {
         for (let n = 0; n < output.length; n++) {
             // Compute the error as the difference between target and output
             let err = target[n] - output[n];
-            dbg(`adjust_weights: ${this.out_layer}:${n} err:${err} = target:${target[n]} + output:${output[n]}`);
+            //dbg(`adjust_weights: ${this.out_layer}:${n} err:${err} = target:${target[n]} + output:${output[n]}`);
 
             // Compute the partial derivative of the activation w.r.t. error
             let pd_err = err * output[n] * (1.0 - output[n]);
             this.layers[this.out_layer][n].pd_error = pd_err;
-            dbg(`adjust_weights: ${this.out_layer}:${n} pd_err:${pd_err} = err:${err} * output[${n}]:${output[n]} * (1.0 - output[${n}]:${output[n]}`);
+            //dbg(`adjust_weights: ${this.out_layer}:${n} pd_err:${pd_err} = err:${err} * output[${n}]:${output[n]} * (1.0 - output[${n}]:${output[n]}`);
 
             // Compute the sum of the square of the error and add to total_error
             let sse = 0.5 * err * err;
-            dbg(`adjust_weights: ${this.out_layer}:${n} sse:${sse} = 0.5 * err:${err} * err:${err}`);
+            //dbg(`adjust_weights: ${this.out_layer}:${n} sse:${sse} = 0.5 * err:${err} * err:${err}`);
             let tmp = this.error;
             this.error = tmp + sse;
-            dbg(`adjust_weights: ${this.out_layer}:${n} this.error:${this.error} = this.error:${tmp} + sse:${sse}`);
+            //dbg(`adjust_weights: ${this.out_layer}:${n} this.error:${this.error} = this.error:${tmp} + sse:${sse}`);
         }
-        dbg(`adjust_weights: out_layer:${this.out_layer} this.error=${this.error}`);
+        //dbg(`adjust_weights: out_layer:${this.out_layer} this.error=${this.error}`);
 
         // For all of layers starting at the output layer back propagate the pd_error
         // to the previous layers. The output layers pd_error has been calculated above
-        dbg("\nadjust_weights: backpropagate pd_error to hidden layers");
+        //dbg("\nadjust_weights: backpropagate pd_error to hidden layers");
         let first_hidden_layer = 1;
         for (let l = this.out_layer; l > first_hidden_layer; l--) {
             let cur_layer = this.layers[l];
             let prev_layer = this.layers[l-1];
-            dbg(`adjust_weights: cur_layer=${l} prev_layer=${l-1}`);
+            //dbg(`adjust_weights: cur_layer=${l} prev_layer=${l-1}`);
 
             // Compute the partial derivative of the error for the previous layer
             for (let npl = 0; npl < prev_layer.length; npl++) {
                 let sum_weighted_pd_err = 0.0;
                 for (let ncl = 0; ncl < cur_layer.length; ncl++) {
                     let pd_err = cur_layer[ncl].pd_error;
-                    dbg(`adjust_weights: ${l}:${ncl} pd_err=${pd_err}`);
+                    //dbg(`adjust_weights: ${l}:${ncl} pd_err=${pd_err}`);
                     let weight = cur_layer[ncl].weights[npl+1];
-                    dbg(`adjust_weights: ${l}:${ncl} weight:${weight} = cur_layer[${ncl}].weights[${npl+1}]`);
+                    //dbg(`adjust_weights: ${l}:${ncl} weight:${weight} = cur_layer[${ncl}].weights[${npl+1}]`);
                     let tmp = sum_weighted_pd_err;
                     sum_weighted_pd_err = tmp + (pd_err * weight);
-                    dbg(`adjust_weights: ${l}:${ncl} sum_weighted_pd_err:${sum_weighted_pd_err} = ${tmp} + (pd_err:${pd_err} * weight:${weight})`);
+                    //dbg(`adjust_weights: ${l}:${ncl} sum_weighted_pd_err:${sum_weighted_pd_err} = ${tmp} + (pd_err:${pd_err} * weight:${weight})`);
                 }
 
                 let prev_out = prev_layer[npl].output;
                 let pd_prev_out = prev_out * (1.0 - prev_out);
-                dbg(`adjust_weights: prev_layer:${l-1}:${npl} pd_prev_out:${pd_prev_out} = prev_out:${prev_out} * (1.0 - prev_out:${prev_out})`);
+                //dbg(`adjust_weights: prev_layer:${l-1}:${npl} pd_prev_out:${pd_prev_out} = prev_out:${prev_out} * (1.0 - prev_out:${prev_out})`);
                 prev_layer[npl].pd_error = sum_weighted_pd_err * pd_prev_out;
-                dbg(`adjust_weights: prev_layer:${l-1}:${npl} pd_error:${prev_layer[npl].pd_error} = sum_weighted_pd_err:${sum_weighted_pd_err} * pd_prev_out:${pd_prev_out}`);
+                //dbg(`adjust_weights: prev_layer:${l-1}:${npl} pd_error:${prev_layer[npl].pd_error} = sum_weighted_pd_err:${sum_weighted_pd_err} * pd_prev_out:${pd_prev_out}`);
             }
         }
 
         // Update the weights for hidden layers and output layer
-        dbg(`\nadjust_weights: update weights learning_rate=${this.learning_rate} momemutum_factor=${this.momentum_factor}`);
+        //dbg(`\nadjust_weights: update weights learning_rate=${this.learning_rate} momemutum_factor=${this.momentum_factor}`);
         for (let l = 1; l <= this.out_layer; l++) {
             let layer = this.layers[l];
-            dbg(`adjust_weights: layers:${l} looping`);
+            //dbg(`adjust_weights: layers:${l} looping`);
             for (let n = 0; n < layer.length; n++) {
                 let neuron = layer[n];
                 let inputs = neuron.inputs;
@@ -265,31 +265,31 @@ export default class NeuralNet {
 
                 // Update the weights for bias
                 let momentum = this.momentum_factor * momentums[0];
-                dbg(`adjust_weights: ${l}:${n} momentum:${momentum} = this.momentum_factor:${this.momentum_factor} * momentums[0]:${momentums[0]}`);
+                //dbg(`adjust_weights: ${l}:${n} momentum:${momentum} = this.momentum_factor:${this.momentum_factor} * momentums[0]:${momentums[0]}`);
                 momentums[0] = (this.learning_rate * pd_err) + momentum;
-                dbg(`adjust_weights: ${l}:${n} momentums[0]:${momentums[0]} = (eta:${this.learning_rate} * pd_err:${pd_err}) + momentum:${momentum} bias`);
+                //dbg(`adjust_weights: ${l}:${n} momentums[0]:${momentums[0]} = (eta:${this.learning_rate} * pd_err:${pd_err}) + momentum:${momentum} bias`);
 
                 let w = weights[0];
                 weights[0] = weights[0] + momentums[0];
-                dbg(`adjust_weights: ${l}:${n} weights[0]=${weights[0]} = weights[0]:${weights[0]} + momentums[0]:${momentums[0]} bias`);
+                //dbg(`adjust_weights: ${l}:${n} weights[0]=${weights[0]} = weights[0]:${weights[0]} + momentums[0]:${momentums[0]} bias`);
 
                 // Loop through this neurons input neurons adjusting the weights and momentums
-                dbg(`adjust_weights: ${l}:${n} update weights pd_err=${pd_err}`);
+                //dbg(`adjust_weights: ${l}:${n} update weights pd_err=${pd_err}`);
                 for (let i = 1; i <= neuron.inputs.length; i++) {
                     // Update the weights
                     let input = inputs[i-1].output;
                     momentum = this.momentum_factor * momentums[i];
                     momentums[i]  = (this.learning_rate * input * pd_err) + momentum;
-                    dbg(`adjust_weights: ${l}:${n} momentums[${i}]:${momentums[i]} = (eta:${this.learning_rate} * input:${input} pd_err:${pd_err}) + momentum:${momentum}`);
+                    //dbg(`adjust_weights: ${l}:${n} momentums[${i}]:${momentums[i]} = (eta:${this.learning_rate} * input:${input} pd_err:${pd_err}) + momentum:${momentum}`);
 
                     w = weights[i];
                     weights[i] = weights[i] + momentums[i];
-                    dbg(`adjust_weights: ${l}:${n} weights[${i}]:${weights[i]} = weights[${i}]:${weights[i]} + momentums[${i}]=${momentums[i]}`);
+                    //dbg(`adjust_weights: ${l}:${n} weights[${i}]:${weights[i]} = weights[${i}]:${weights[i]} + momentums[${i}]=${momentums[i]}`);
                 }
             }
         }
 
-        dbg(`adjust_weights:- error=${this.error}`);
+        //dbg(`adjust_weights:- error=${this.error}`);
         return this.error;
     }
 }
