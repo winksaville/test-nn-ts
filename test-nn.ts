@@ -78,16 +78,18 @@ function main(argv: string[]) {
         nn.start();
 
         let epoch;
-        let error = 0.999;
+        let error;
         let error_threshold = 0.0004;
         let pattern_count = xor_input_patterns.length;
         let rand_ps = Array<number>(pattern_count);
 
         // Added so output is the same as test-nn.c where
         // nn.get_points is called with the writer is initialized.
-        let pts = nn.get_points();
+        //let pts = nn.get_points();
 
         for (epoch = 0; epoch < epoch_count; epoch++) {
+            error = 0.0;
+
             // Shuffle rand_patterns by swapping the current
             // position t with a random location after the
             // current position.
