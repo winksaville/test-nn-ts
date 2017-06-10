@@ -17,6 +17,8 @@ import * as process from 'process';
 import NeuralNet from './NeuralNet';
 import * as seedrandom from "seedrandom";
 import rand0_1 from "./rand0_1";
+import * as  microtime from "microtime";
+import * as  numeral from "numeral";
 
 import dbg from './Debug';
 
@@ -77,8 +79,8 @@ function main(argv: string[]) {
         // Start the Neural net
         nn.start();
 
-        let epoch;
-        let error;
+        let epoch = 0;
+        let error = 0.0;
         let error_threshold = 0.0004;
         let pattern_count = xor_input_patterns.length;
         let rand_ps = Array<number>(pattern_count);
@@ -87,6 +89,7 @@ function main(argv: string[]) {
         // nn.get_points is called with the writer is initialized.
         //let pts = nn.get_points();
 
+        let start_sec: number = microtime.nowDouble();
         for (epoch = 0; epoch < epoch_count; epoch++) {
             error = 0.0;
 
@@ -118,17 +121,20 @@ function main(argv: string[]) {
                 error += nn.adjust_weights(xor_output[p], xor_target_patterns[p]);
             }
 
-            // Output some progress info
-            if ((epoch % 100000) == 0) {
-                console.log(`Epoch=${epoch}: error=${error}`);
-            }
+            //// Output some progress info
+            //if ((epoch % 100000) == 0) {
+            //    console.log(`Epoch=${epoch}: error=${error}`);
+            //}
 
             // Stop if we've reached the error_threshold
             if (error < error_threshold) {
                 //break;
             }
         }
-        console.log(`\n\nEpoch=${epoch} Error=${error}`);
+        let end_sec: number = microtime.nowDouble();
+        let eps = epoch / (end_sec - start_sec);
+
+        console.log(`Epoch=${numeral(epoch).format("0,0")} Error=${numeral(error).format("0.00e+0")} eps=${numeral(eps).format("0,0")}`);
 
         nn.stop();
 

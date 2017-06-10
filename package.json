@@ -11,9 +11,13 @@
     "dbg": "DEBUG=DBG ts-node --inspect --debug-brk test-nn.ts"
   },
   "dependencies": {
+    "@types/microtime": "^2.1.0",
     "@types/node": "^7.0.27",
+    "@types/numeral": "^0.0.21",
     "@types/seedrandom": "^2.4.27",
     "debug": "^2.6.8",
+    "microtime": "^2.1.5",
+    "numeral": "^2.0.6",
     "seedrandom": "^2.4.3",
     "ts-node": "^3.0.4",
     "typescript": "^2.3.4"
