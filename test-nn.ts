@@ -132,9 +132,14 @@ function main(argv: string[]) {
             }
         }
         let end_sec: number = microtime.nowDouble();
-        let eps = epoch / (end_sec - start_sec);
+        let time_sec = end_sec - start_sec
+        let eps = epoch / time_sec;
 
-        console.log(`Epoch=${numeral(epoch).format("0,0")} Error=${numeral(error).format("0.00e+0")} eps=${numeral(eps).format("0,0")}`);
+        console.log(`Epoch=${numeral(epoch).format("0,0")}`
+            + ` Error=${numeral(error).format("0.00e+0")}`
+            + ` time=${numeral(time_sec).format("0.00")}s`
+            + ` eps=${numeral(eps).format("0,0")}`
+        );
 
         nn.stop();
 
