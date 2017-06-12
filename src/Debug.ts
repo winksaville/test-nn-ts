@@ -15,6 +15,7 @@
  */
 export const debugging = true;
 
+import Unused from "./Unused";
 import * as debugModule from "debug";
 const debug = debugModule("DBG");
 
@@ -28,7 +29,7 @@ if (debugging) {
         }
     }
 } else {
-    dbg = function(s: string) {}
+    dbg = function(s: string) { Unused(s); }
 }
 
 export default dbg;
