@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+      "declaration": true,
+      "outDir": "../build"
+  },
+  "files": [
+      "./Unused.ts",
+      "./Debug.ts",
+      "./NeuralNet.ts",
+      "./Neuron.ts",
+      "./rand0_1.ts",
+      "./test-nn.ts"
+  ]
+}
