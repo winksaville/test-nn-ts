@@ -31,8 +31,6 @@ export default class NeuralNet {
     private momentum_factor: number;    // Momentum factor aka 'aplha'
     private points: number;             // Points is number
 
-    private input: number[];            // Input pattern
-
     // There will always be at least two layers,
     // plus there are zero or more hidden layers.
     layers: Neuron[][];
@@ -88,7 +86,7 @@ export default class NeuralNet {
             this.out_layer = this.last_hidden + 1;
             this.layers[this.out_layer].length = this.layers[this.max_layers - 1].length;
             this.layers[this.out_layer] = this.layers[this.max_layers - 1];
-            this.layers[this.max_layers - 1] = null;
+            this.layers[this.max_layers - 1] = [];
         }
 
         if (DBG) dbg(`start: max_layers=${this.max_layers} last_hidden=${this.last_hidden} out_layer=${this.out_layer}`);
@@ -96,7 +94,7 @@ export default class NeuralNet {
         // Initialize the neurons for all of the layers
         this.points = 0;
         for (let l = 0; l < this.max_layers; l++) {
-            let in_layer: Neuron[];
+            let in_layer: null | Neuron[];
             if (l == 0) {
                 // Layer 0 is the input layer so it has no inputs
                 in_layer = null;

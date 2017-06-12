@@ -25,37 +25,36 @@ export default class Neuron {
     pd_error: number;     // Partial derative of this neurons error
     points: number;       // Points is number of graphic points
 
-    constructor(inputs: Neuron[]) {
+    constructor(inputs: Neuron[] | null) {
         let weights: number[];
         let momentums: number[];
         let points: number;
         dbg("ctor:+");
 
+        // If inputs is null change to an empty array
         if (inputs == null) {
-            weights = null;
-            momentums = null;
-            points = 1;
-        } else {
-            // Calculate the initial weights. Note weights[0] is the bias
-            // so we increase count of weights by one.
-            let count = inputs.length + 1;
-            weights = new Array<number>(count);
-
-            // Initialize weights >= -0.5 and < 0.5
-            dbg(`ctor:  top of loop count=${count}`);
-            for (let w = 0; w < count; w++) {
-                weights[w] = rand0_1() - 0.5;
-                dbg(`ctor: weights[${w}]=${weights[w]}`);
-            }
-
-            // Allocate an array of mementums initialize to 0.0
-            momentums = new Array<number>(count);
-            for (let m = 0; m < count; m++) {
-                momentums[m] = 0.0;
-            }
-
-            points = count; // + 1 // for output
+            inputs = [];
         }
+
+        // Calculate the initial weights. Note weights[0] is the bias
+        // so we increase count of weights by one.
+        let count = inputs.length + 1;
+        weights = new Array<number>(count);
+
+        // Initialize weights >= -0.5 and < 0.5
+        dbg(`ctor:  top of loop count=${count}`);
+        for (let w = 0; w < count; w++) {
+            weights[w] = rand0_1() - 0.5;
+            dbg(`ctor: weights[${w}]=${weights[w]}`);
+        }
+
+        // Allocate an array of mementums initialize to 0.0
+        momentums = new Array<number>(count);
+        for (let m = 0; m < count; m++) {
+            momentums[m] = 0.0;
+        }
+
+        points = count;
 
         this.inputs = inputs;
         this.weights = weights;

@@ -1,1 +1,1 @@
-export default function Unused(a: any) {}
+export default function Unused(a: any) {a;}
