@@ -6,11 +6,16 @@
   "author": "Wink Saville <wink@saville.com>",
   "license": "APACHE2",
   "scripts": {
-    "runit": "ts-node test-nn.ts",
-    "test": "DEBUG=DBG ts-node test-nn.ts",
-    "dbg": "DEBUG=DBG ts-node --inspect --debug-brk test-nn.ts"
+    "cleanup": "rm -rf build; mkdir -p build",
+    "postinstall": "mkdir -p build",
+    "build": "tsc -p src/tsconfig.json",
+    "doit": "node build/test-nn.js",
+    "runit": "yarn build && yarn doit",
+    "test": "yarn build && DEBUG=DBG yarn doit",
+    "dbg": "yarn build && DEBUG=DBG node --inspect-brk build/test-nn.js"
   },
   "dependencies": {
+    "@types/debug": "^0.0.29",
     "@types/microtime": "^2.1.0",
     "@types/node": "^7.0.27",
     "@types/numeral": "^0.0.21",

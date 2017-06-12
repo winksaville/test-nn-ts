@@ -18,7 +18,7 @@ export const debugging = true;
 import * as debugModule from "debug";
 const debug = debugModule("DBG");
 
-type DebugFunction = (s: string) => void;
+export type DebugFunction = (s: string) => void;
 
 var dbg: DebugFunction;
 if (debugging) {
