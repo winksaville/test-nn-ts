@@ -50,20 +50,40 @@ function consolew(s: string) {
 
 function main(argv: string[]) {
     try {
+        let epoch_count = 0.0;
+        let error_threshold = 0.0004;
+
         dbg("test-nn:+");
         debugger;
 
+        let MAX_SAFE_INTEGER = Math.pow(2, 53) - 1;
+
         if (argv.length < 3) {
-            console.log(`Usage: yarn test <number of epochs>`);
-            argv.forEach((val, index) => {
-                console.log(`${index}: ${val}`);
-            });
-
-            return;
+            console.log("Usage: %s <param1>\n", argv[0]);
+            console.log("  param1: if param1 >= 1 then number of epochs");
+            console.log("          else if param1 >= 0.0 && param1 < 1.0 then error threshold typical = 0.0004");
+            console.log("          else param1 invalid");
+            process.exit(0);
         }
-        Math.random = seedrandom('1');
 
-        let epoch_count: number = parseInt(argv[2]);
+        error_threshold = parseFloat(argv[2]);
+        if (error_threshold < 0.0) {
+            console.log(`param1:${numeral(error_threshold).format("0.00")} < 0.0, aborting`);
+            process.exit(1);
+        } else if ((error_threshold > 0.0) && (error_threshold < 1.0)) {
+            epoch_count = MAX_SAFE_INTEGER;
+        } else {
+            let count = Math.floor(error_threshold);
+            if (count > MAX_SAFE_INTEGER) {
+                console.log(`param1:${numeral(count).format("0.00")} > `
+                            + `${numeral(MAX_SAFE_INTEGER).format("0,0")}, aborting`);
+                process.exit(1);
+            }
+            epoch_count = count;
+            error_threshold = 0.0;
+        }
+
+        Math.random = seedrandom('1');
 
         dbg(`test-nn: epoch_count=${epoch_count}`);
         
@@ -81,7 +101,6 @@ function main(argv: string[]) {
 
         let epoch = 0;
         let error = 0.0;
-        let error_threshold = 0.0004;
         let pattern_count = xor_input_patterns.length;
         let rand_ps = Array<number>(pattern_count);
 
@@ -121,14 +140,9 @@ function main(argv: string[]) {
                 error += nn.adjust_weights(xor_output[p], xor_target_patterns[p]);
             }
 
-            //// Output some progress info
-            //if ((epoch % 100000) == 0) {
-            //    console.log(`Epoch=${epoch}: error=${error}`);
-            //}
-
             // Stop if we've reached the error_threshold
             if (error < error_threshold) {
-                //break;
+                break;
             }
         }
         let end_sec: number = microtime.nowDouble();
