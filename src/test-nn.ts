@@ -17,7 +17,6 @@ import * as process from 'process';
 import NeuralNet from './NeuralNet';
 import * as seedrandom from "seedrandom";
 import rand0_1 from "./rand0_1";
-import * as  microtime from "microtime";
 import * as  numeral from "numeral";
 
 import dbg from './Debug';
@@ -108,7 +107,7 @@ function main(argv: string[]) {
         // nn.get_points is called with the writer is initialized.
         //let pts = nn.get_points();
 
-        let start_sec: number = microtime.nowDouble();
+        let start_sec: number = Date.now() / 1000.0;
         for (epoch = 0; epoch < epoch_count; epoch++) {
             error = 0.0;
 
@@ -145,7 +144,7 @@ function main(argv: string[]) {
                 break;
             }
         }
-        let end_sec: number = microtime.nowDouble();
+        let end_sec: number = Date.now() / 1000.0;
         let time_sec = end_sec - start_sec
         let eps = epoch / time_sec;
 
